@@ -1,26 +1,34 @@
 // src/pages/Home.js
 
 import React from 'react';
-import { Container, Jumbotron, Button } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import HeroSection from '../components/HeroSection';
+import Description from '../components/Description';
+import GetStartedButton from '../components/GetStartedButton';
+
+// Placeholder background image URL (you can replace it with your own image)
+const heroBackground = 'https://via.placeholder.com/1920x600.png?text=Hero+Background';
 
 const Home = () => {
   return (
-    <Container className="mt-4">
-      <div className="p-5 mb-4 bg-light rounded-3">
-        <h1 className="display-5 fw-bold">Welcome to AI Builder</h1>
-        <p className="col-md-8 fs-4">
-          Build and customize your website effortlessly with our intuitive templates and tools.
-        </p>
-        <Link to="/signup">
-          <Button variant="primary" size="lg">
-            Get Started
-          </Button>
-        </Link>
-      </div>
-    </Container>
+    <div>
+      {/* Hero Section */}
+      <HeroSection
+        title="Welcome to AI Builder"
+        subtitle="Create stunning websites effortlessly with AI-driven suggestions."
+        backgroundImage={heroBackground}
+      />
+
+      {/* Description Section */}
+      <Description
+        text="AI Builder is a platform that leverages artificial intelligence to provide you with personalized website templates tailored to your specific needs and industry. Whether you're building an e-commerce store, a personal blog, or a corporate website, AI Builder has got you covered."
+      />
+
+      {/* Get Started Button */}
+      <section className="text-center my-5">
+        <GetStartedButton text="Get Started" to="/get-started" />
+      </section>
+    </div>
   );
 };
 
 export default Home;
- 

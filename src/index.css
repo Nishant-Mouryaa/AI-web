@@ -11,3 +11,22 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+/* src/index.css */
+
+/* Ensure the sidebar takes full height */
+.vh-100 {
+  height: 100vh !important;
+  overflow-y: auto;
+}
+
+/* Optional: Customize card headers */
+.card-header {
+  background-color: #f8f9fa;
+  font-weight: bold;
+}
+
+/* Optional: Add padding to the main content */
+.main-content {
+  padding: 20px;
+}

@@ -1,10 +1,16 @@
 // src/pages/Dashboard.js
 
 import React, { useEffect, useState, useContext } from 'react';
-import { Container, Card, Spinner, Alert, Button } from 'react-bootstrap';
+import { Container, Spinner, Alert, Row, Col } from 'react-bootstrap';
 import axiosInstance from '../api/axiosInstance'; // Import the Axios instance
 import { AuthContext } from '../context/AuthContext'; // Import AuthContext
 import { useNavigate } from 'react-router-dom';
+import DashboardNavbar from '../components/Dashboard/Navbar';
+import DashboardSidebar from '../components/Dashboard/Sidebar';
+import UserDetails from '../components/Dashboard/UserDetails';
+import WebsitePreferences from '../components/Dashboard/WebsitePreferences';
+import DescriptionSection from '../components/Dashboard/DescriptionSection';
+// import DashboardFooter from '../components/Dashboard/Footer';
 
 const Dashboard = () => {
   const { logout } = useContext(AuthContext); // Get logout function from context
@@ -42,62 +48,112 @@ const Dashboard = () => {
     navigate('/'); // Redirect to Home or Login page
   };
 
+  // Handlers to update user data
+  const updatePreferences = async (newPreferences) => {
+    try {
+      const response = await axiosInstance.put('/auth/user/preferences', newPreferences);
+      setUserData((prevData) => ({
+        ...prevData,
+        websitePreferences: response.data.websitePreferences,
+      }));
+    } catch (err) {
+      console.error('Failed to update preferences:', err);
+      // Optionally, set error state or show a notification
+    }
+  };
+
+  const updateDescription = async (newDescription) => {
+    try {
+      const response = await axiosInstance.put('/auth/user/description', { description: newDescription });
+      setUserData((prevData) => ({
+        ...prevData,
+        description: response.data.description,
+      }));
+    } catch (err) {
+      console.error('Failed to update description:', err);
+      // Optionally, set error state or show a notification
+    }
+  };
+
+  const updateUserDetails = async (newName) => {
+    try {
+      const response = await axiosInstance.put('/auth/user/name', { name: newName });
+      setUserData((prevData) => ({
+        ...prevData,
+        name: response.data.name,
+      }));
+    } catch (err) {
+      console.error('Failed to update name:', err);
+      // Optionally, set error state or show a notification
+    }
+  };
+
   if (loading) {
     return (
-      <Container className="mt-5 text-center">
-        <Spinner animation="border" role="status" />
-        <p className="mt-3">Loading your dashboard...</p>
-      </Container>
+      <>
+        <DashboardNavbar />
+        <Container className="mt-5 text-center">
+          <Spinner animation="border" role="status" />
+          <p className="mt-3">Loading your dashboard...</p>
+        </Container>
+      </>
     );
   }
 
   if (error) {
+    // Check if the error is related to authentication
+    const isAuthError = error.toLowerCase().includes('authentication') || error.toLowerCase().includes('token');
+
     return (
-      <Container className="mt-5">
-        <Alert variant="danger">{error}</Alert>
-        <Button variant="primary" onClick={() => navigate('/login')}>
-          Go to Login
-        </Button>
-      </Container>
+      <>
+        <DashboardNavbar />
+        <Container className="mt-5">
+          <Alert variant="danger">
+            {error}
+            {isAuthError && (
+              <>
+                <Alert.Link href="/login"> Go to Login</Alert.Link>
+              </>
+            )}
+          </Alert>
+        </Container>
+      </>
     );
   }
 
   return (
-    <Container className="mt-4" style={{ maxWidth: '800px' }}>
-      <h2 className="mb-4">Dashboard</h2>
-      <Card className="mb-4">
-        <Card.Header>User Details</Card.Header>
-        <Card.Body>
-          <Card.Title>Email</Card.Title>
-          <Card.Text>{userData.email}</Card.Text>
-        </Card.Body>
-      </Card>
+    <>
+      <DashboardNavbar />
+      <Container fluid>
+        <Row>
+          {/* Sidebar */}
+          <Col xs={12} md={3} lg={2} className="bg-light vh-100">
+            <DashboardSidebar />
+          </Col>
 
-      <Card className="mb-4">
-        <Card.Header>Website Preferences</Card.Header>
-        <Card.Body>
-          <Card.Title>Theme</Card.Title>
-          <Card.Text>{userData.websitePreferences.theme}</Card.Text>
+          {/* Main Content */}
+          <Col xs={12} md={9} lg={10} className="py-4 d-flex flex-column">
+            <h2 className="mb-4">Dashboard</h2>
+            <UserDetails email={userData.email} name={userData.name} updateUserDetails={updateUserDetails} />
 
-          <Card.Title>Layout</Card.Title>
-          <Card.Text>{userData.websitePreferences.layout}</Card.Text>
+            <WebsitePreferences
+              preferences={userData.websitePreferences}
+              updatePreferences={updatePreferences}
+            />
 
-          <Card.Title>Color Scheme</Card.Title>
-          <Card.Text>{userData.websitePreferences.colorScheme}</Card.Text>
-        </Card.Body>
-      </Card>
+            <DescriptionSection
+              description={userData.description}
+              updateDescription={updateDescription}
+            />
 
-      <Card className="mb-4">
-        <Card.Header>Description</Card.Header>
-        <Card.Body>
-          <Card.Text>{userData.description}</Card.Text>
-        </Card.Body>
-      </Card>
-
-      <Button variant="danger" onClick={handleLogout}>
-        Logout
-      </Button>
-    </Container>
+            {/* Push Footer to bottom */}
+            <div className="mt-auto">
+              {/* <DashboardFooter /> */}
+            </div>
+          </Col>
+        </Row>
+      </Container>
+    </>
   );
 };
 

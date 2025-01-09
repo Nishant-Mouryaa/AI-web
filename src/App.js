@@ -10,6 +10,8 @@ import Login from './pages/Login';
 import Signup from './pages/Signup';
 import Dashboard from './pages/Dashboard';
 import ProtectedRoute from './components/ProtectedRoute';
+import GetStarted from './pages/GetStarted';
+import Footer from './components/Footer';
 
 function App() {
   return (
@@ -17,6 +19,7 @@ function App() {
       <NavbarComponent />
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/get-started" element={<GetStarted />} />
         <Route path="/pricing" element={<Pricing />} />
         <Route path="/faq" element={<FAQ />} />
         <Route path="/login" element={<Login />} />
@@ -32,6 +35,7 @@ function App() {
         />
         {/* Add more routes as needed */}
       </Routes>
+      <Footer />
     </Router>
   );
 }
