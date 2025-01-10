@@ -8,7 +8,7 @@ const HeroSection = ({ title, subtitle, backgroundImage }) => {
     backgroundSize: 'cover',
     backgroundPosition: 'center',
     padding: '100px 0',
-    color: '#fff',
+    color: '#333',
     textAlign: 'center',
   };
 
