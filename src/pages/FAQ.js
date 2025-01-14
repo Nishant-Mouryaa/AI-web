@@ -1,42 +1,108 @@
-// src/pages/FAQ.js
+import React, { useState } from 'react';
+import '../styles/FAQ.css';
 
-import React from 'react';
-import { Container, Accordion } from 'react-bootstrap';
+const faqData = [
+  {
+    category: 'Billing',
+    faqs: [
+      {
+        question: 'What happens if I exceed my plan limits?',
+        answer: 'You can upgrade to a higher plan anytime.',
+      },
+      {
+        question: 'Do you offer refunds?',
+        answer: 'Yes, we offer a 14-day money-back guarantee.',
+      },
+    ],
+  },
+  {
+    category: 'Account Management',
+    faqs: [
+      {
+        question: 'Can I switch plans later?',
+        answer: 'Absolutely. You can upgrade or downgrade anytime.',
+      },
+      {
+        question: 'How do I reset my password?',
+        answer: 'Click on "Forgot Password" on the login page to reset it.',
+      },
+    ],
+  },
+  {
+    category: 'Technical Support',
+    faqs: [
+      {
+        question: 'How do I report an issue?',
+        answer: 'Use the support form in your account dashboard.',
+      },
+      {
+        question: 'Is the platform mobile-friendly?',
+        answer: 'Absolutely! All sites are responsive and optimized for mobile devices.',
+      },
+    ],
+  },
+];
 
 const FAQ = () => {
-  const faqs = [
-    {
-      question: 'What is AI Builder?',
-      answer:
-        'AI Builder is a platform that allows you to create and customize websites using AI-powered templates and tools.',
-    },
-    {
-      question: 'How do I get started?',
-      answer:
-        'Simply sign up for an account, choose a pricing plan that suits your needs, and start building your website with our intuitive editor.',
-    },
-    {
-      question: 'Can I upgrade my plan later?',
-      answer:
-        'Yes, you can upgrade or downgrade your plan at any time from your account settings.',
-    },
-    // Add more FAQs as needed
-  ];
+  const [openCategory, setOpenCategory] = useState(null);
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const toggleCategory = (category) => {
+    setOpenCategory(openCategory === category ? null : category);
+  };
+
+  const filteredFAQs = faqData.map((categoryData) => ({
+    ...categoryData,
+    faqs: categoryData.faqs.filter(
+      (faq) =>
+        faq.question.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        faq.answer.toLowerCase().includes(searchQuery.toLowerCase())
+    ),
+  }));
+
+  const hasResults = filteredFAQs.some((category) => category.faqs.length > 0);
 
   return (
-    <Container className="mt-4">
-      <h2 className="mb-4">Frequently Asked Questions</h2>
-      <Accordion defaultActiveKey="0">
-        {faqs.map((faq, index) => (
-          <Accordion.Item eventKey={index.toString()} key={index}>
-            <Accordion.Header>{faq.question}</Accordion.Header>
-            <Accordion.Body>{faq.answer}</Accordion.Body>
-          </Accordion.Item>
-        ))}
-      </Accordion>
-    </Container>
+    <div className="faq-container">
+      <h1 className="faq-title">Frequently Asked Questions</h1>
+      <p className="faq-intro">Find answers organized by topic for your convenience.</p>
+
+      <input
+        type="text"
+        className="faq-search"
+        placeholder="Search FAQs..."
+        value={searchQuery}
+        onChange={(e) => setSearchQuery(e.target.value)}
+      />
+
+      {hasResults ? (
+        filteredFAQs.map((categoryData, index) => (
+          <div key={index} className="faq-category">
+            <h2
+              className="faq-category-title"
+              onClick={() => toggleCategory(categoryData.category)}
+            >
+              {categoryData.category}
+            </h2>
+            <div
+              className={`faq-items ${
+                openCategory === categoryData.category ? 'expanded' : 'collapsed'
+              }`}
+            >
+              {categoryData.faqs.map((faq, idx) => (
+                <div key={idx} className="faq-item">
+                  <h3 className="faq-question">{faq.question}</h3>
+                  <p className="faq-answer">{faq.answer}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        ))
+      ) : (
+        <p className="no-results">No FAQs match your search.</p>
+      )}
+    </div>
   );
 };
 
 export default FAQ;
- 
