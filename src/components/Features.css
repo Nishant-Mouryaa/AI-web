@@ -1,0 +1,45 @@
+/* src/components/Features.css */
+
+.feature-card {
+    transition: transform 0.3s, box-shadow 0.3s;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .feature-card:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.5); /* Bootstrap primary color outline */
+  }
+  
+  .feature-card:hover,
+  .feature-card:focus {
+    transform: translateY(-10px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  }
+  
+  .feature-icon {
+    transition: transform 0.3s, color 0.3s;
+  }
+  
+  .feature-card:hover .feature-icon,
+  .feature-card:focus .feature-icon {
+    transform: scale(1.2);
+    color: #007bff; /* Bootstrap primary color */
+  }
+  
+  .more-info {
+    margin-top: 10px;
+    transition: max-height 0.3s ease, opacity 0.3s ease;
+    opacity: 0;
+  }
+  
+  .feature-card .collapse.show .more-info {
+    opacity: 1;
+  }
+  
+  /* Additional styles for Framer Motion */
+  .feature-card-wrapper {
+    height: 100%;
+  }
+  
