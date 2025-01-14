@@ -1,0 +1,45 @@
+/* src/components/HowItWorks.css */
+
+.howitworks-card {
+    transition: transform 0.3s, box-shadow 0.3s;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .howitworks-card:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.5); /* Bootstrap primary color outline */
+  }
+  
+  .howitworks-card:hover,
+  .howitworks-card:focus {
+    transform: translateY(-10px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  }
+  
+  .howitworks-icon {
+    transition: transform 0.3s, color 0.3s;
+  }
+  
+  .howitworks-card:hover .howitworks-icon,
+  .howitworks-card:focus .howitworks-icon {
+    transform: scale(1.2);
+    color: #28a745; /* Bootstrap success color */
+  }
+  
+  .more-info {
+    margin-top: 10px;
+    transition: max-height 0.3s ease, opacity 0.3s ease;
+    opacity: 0;
+  }
+  
+  .howitworks-card .collapse.show .more-info {
+    opacity: 1;
+  }
+  
+  /* Additional styles for Framer Motion */
+  .howitworks-card-wrapper {
+    height: 100%;
+  }
+  
