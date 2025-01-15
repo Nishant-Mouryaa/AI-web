@@ -1,5 +1,13 @@
+// src/pages/FAQ.js
+
 import React, { useState } from 'react';
 import '../styles/FAQ.css';
+import { Container, Accordion, Card, Button, Form, InputGroup } from 'react-bootstrap';
+import { FaPlus, FaMinus, FaSearch } from 'react-icons/fa';
+import { motion } from 'framer-motion';
+import AOS from 'aos';
+import Highlighter from 'react-highlight-words';
+import 'aos/dist/aos.css'; // Import AOS styles
 
 const faqData = [
   {
@@ -41,67 +49,130 @@ const faqData = [
       },
     ],
   },
+  // Add more categories and FAQs as needed
 ];
 
 const FAQ = () => {
-  const [openCategory, setOpenCategory] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
+  const [activeCategory, setActiveCategory] = useState('All');
 
-  const toggleCategory = (category) => {
-    setOpenCategory(openCategory === category ? null : category);
-  };
+  // Initialize AOS
+  React.useEffect(() => {
+    AOS.init({
+      duration: 800, // Animation duration
+      once: true,    // Whether animation should happen only once
+    });
+  }, []);
 
-  const filteredFAQs = faqData.map((categoryData) => ({
-    ...categoryData,
-    faqs: categoryData.faqs.filter(
-      (faq) =>
-        faq.question.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        faq.answer.toLowerCase().includes(searchQuery.toLowerCase())
-    ),
-  }));
+  // Function to filter FAQs based on search query and active category
+  const filteredFAQs = faqData
+    .filter((categoryData) => activeCategory === 'All' || categoryData.category === activeCategory)
+    .map((categoryData) => ({
+      ...categoryData,
+      faqs: categoryData.faqs.filter(
+        (faq) =>
+          faq.question.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          faq.answer.toLowerCase().includes(searchQuery.toLowerCase())
+      ),
+    }))
+    .filter((categoryData) => categoryData.faqs.length > 0); // Remove categories with no matching FAQs
 
-  const hasResults = filteredFAQs.some((category) => category.faqs.length > 0);
+  const hasResults = filteredFAQs.length > 0;
 
   return (
-    <div className="faq-container">
-      <h1 className="faq-title">Frequently Asked Questions</h1>
-      <p className="faq-intro">Find answers organized by topic for your convenience.</p>
+    <Container className="faq-container my-5" id="faq">
+      <motion.div
+        initial={{ opacity: 0, y: -50 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8 }}
+        data-aos="fade-up"
+      >
+        <h1 className="faq-title text-center mb-4">Frequently Asked Questions</h1>
+        <p className="faq-intro text-center mb-4">
+          Find answers organized by topic for your convenience.
+        </p>
 
-      <input
-        type="text"
-        className="faq-search"
-        placeholder="Search FAQs..."
-        value={searchQuery}
-        onChange={(e) => setSearchQuery(e.target.value)}
-      />
+        {/* Search Bar */}
+        <Form className="mb-4" aria-label="Search FAQs">
+          <InputGroup>
+            <InputGroup.Text id="search-icon">
+              <FaSearch />
+            </InputGroup.Text>
+            <Form.Control
+              type="text"
+              placeholder="Search FAQs..."
+              aria-label="Search FAQs"
+              aria-describedby="search-icon"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+          </InputGroup>
+        </Form>
 
-      {hasResults ? (
-        filteredFAQs.map((categoryData, index) => (
-          <div key={index} className="faq-category">
-            <h2
-              className="faq-category-title"
-              onClick={() => toggleCategory(categoryData.category)}
+        {/* Category Filters */}
+        <div className="category-filters text-center mb-4">
+          {['All', 'Billing', 'Account Management', 'Technical Support'].map((category, idx) => (
+            <Button
+              key={idx}
+              variant={activeCategory === category ? 'primary' : 'outline-primary'}
+              className="me-2 mb-2"
+              onClick={() => setActiveCategory(category)}
+              aria-pressed={activeCategory === category}
+              aria-label={`Filter by ${category}`}
             >
-              {categoryData.category}
-            </h2>
-            <div
-              className={`faq-items ${
-                openCategory === categoryData.category ? 'expanded' : 'collapsed'
-              }`}
+              {category}
+            </Button>
+          ))}
+        </div>
+
+        {/* Display FAQs */}
+        {hasResults ? (
+          filteredFAQs.map((categoryData, index) => (
+            <Accordion
+              key={index}
+              className="faq-category"
+              defaultActiveKey={null}
+              alwaysOpen={false}
+              flush
+              data-aos="fade-up"
+              data-aos-delay={index * 100}
             >
-              {categoryData.faqs.map((faq, idx) => (
-                <div key={idx} className="faq-item">
-                  <h3 className="faq-question">{faq.question}</h3>
-                  <p className="faq-answer">{faq.answer}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        ))
-      ) : (
-        <p className="no-results">No FAQs match your search.</p>
-      )}
-    </div>
+              <Accordion.Item eventKey="0">
+                <Accordion.Header>
+                  <span className="category-title">{categoryData.category}</span>
+                </Accordion.Header>
+                <Accordion.Body>
+                  {categoryData.faqs.map((faq, idx) => (
+                    <Accordion key={idx} className="faq-item" flush>
+                      <Accordion.Item eventKey={idx.toString()}>
+                        <Accordion.Header>
+                          <Highlighter
+                            highlightClassName="highlight"
+                            searchWords={[searchQuery]}
+                            autoEscape={true}
+                            textToHighlight={faq.question}
+                          />
+                        </Accordion.Header>
+                        <Accordion.Body>
+                          <Highlighter
+                            highlightClassName="highlight"
+                            searchWords={[searchQuery]}
+                            autoEscape={true}
+                            textToHighlight={faq.answer}
+                          />
+                        </Accordion.Body>
+                      </Accordion.Item>
+                    </Accordion>
+                  ))}
+                </Accordion.Body>
+              </Accordion.Item>
+            </Accordion>
+          ))
+        ) : (
+          <p className="no-results text-center">No FAQs match your search.</p>
+        )}
+      </motion.div>
+    </Container>
   );
 };
 

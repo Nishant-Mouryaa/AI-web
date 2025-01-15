@@ -1,0 +1,43 @@
+/* src/components/GetStartedButton.css */
+
+.get-started-button .btn {
+    transition: background-color 0.3s, box-shadow 0.3s;
+  }
+  
+  .get-started-button .btn:hover {
+    background-color: #1a202c; /* Darker shade on hover */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+  
+  .get-started-button .btn:focus {
+    box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.6); /* Focus ring */
+  }
+  
+  .get-started-button .arrow-icon {
+    transition: transform 0.3s;
+  }
+  
+  .get-started-button .btn:hover .arrow-icon {
+    transform: translateX(5px);
+  }
+  
+  .get-started-button .spinner-border {
+    transition: opacity 0.3s;
+  }
+  
+  /* Responsive Design */
+  
+  @media (max-width: 768px) {
+    .get-started-button .btn {
+      font-size: 0.9rem;
+      padding: 0.5rem 1rem;
+    }
+  }
+  
+  @media (max-width: 576px) {
+    .get-started-button .btn {
+      font-size: 0.85rem;
+      padding: 0.5rem 0.75rem;
+    }
+  }
+  

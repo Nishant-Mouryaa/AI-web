@@ -1,85 +1,92 @@
+/* src/styles/Pricing.css */
 
 .pricing-plans {
-    text-align: center;
-    padding: 20px;
+  padding: 60px 20px;
+}
+
+.billing-cycle-switch {
+  /* Center the toggle switch */
+}
+
+.plan-card-wrapper {
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.plan-card-wrapper:hover .plan-card,
+.plan-card-wrapper:focus .plan-card {
+  transform: translateY(-10px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.plan-card {
+  transition: transform 0.3s, box-shadow 0.3s;
+  cursor: pointer;
+  position: relative;
+  border: 1px solid #dee2e6; /* Light border */
+  border-radius: 15px;
+  padding-top: 40px; /* Space for the badge */
+  background-color: #fff; /* White background */
+}
+
+.plan-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.recommended {
+  border: 2px solid #ffc107; /* Highlight recommended plan */
+}
+
+.recommended-badge {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  padding: 10px 15px;
+  border-radius: 50px;
+  font-size: 0.9rem;
+  font-weight: bold;
+}
+
+.plan-name {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.plan-price {
+  font-size: 1.25rem;
+  margin-bottom: 20px;
+}
+
+.plan-features li {
+  margin-bottom: 10px;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+}
+
+.plan-features li .text-success {
+  /* Icon styling */
+}
+
+@media (max-width: 768px) {
+  .recommended-badge {
+    top: -5px;
+    right: -5px;
+    padding: 8px 12px;
+    font-size: 0.8rem;
   }
-  
-  .billing-cycle-switch {
-    margin-bottom: 20px;
+}
+
+@media (max-width: 576px) {
+  .plan-name {
+    font-size: 1.25rem;
   }
-  
-  .billing-cycle-switch button {
-    margin: 0 10px;
-    padding: 10px 20px;
-    color: #333;
-    border: none;
-    background-color: #f0f0f0;
-    cursor: pointer;
-    transition: background-color 0.3s;
+
+  .plan-price {
+    font-size: 1rem;
   }
-  
-  .billing-cycle-switch button.active {
-    background-color: #007bff;
-    color: white;
+
+  .plan-features li {
+    font-size: 0.9rem;
   }
-  
-  .billing-cycle-switch button:hover {
-    background-color: black;
-    color: white;
-  }
-  
-  .plans {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    flex-wrap: wrap;
-  }
-  
-  .plan-card {
-    background-color: white;
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    padding: 20px;
-    width: 300px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s;
-  }
-  
-  .plan-card:hover {
-    transform: translateY(-10px);
-  }
-  
-  .plan-card h3 {
-    margin-top: 0;
-    color: #333;
-  }
-  
-  .plan-card .price {
-    font-size: 24px;
-    color: #007bff;
-    margin: 10px 0;
-  }
-  
-  .plan-card ul {
-    list-style: none;
-    padding: 0;
-    margin: 20px 0;
-  }
-  
-  .plan-card ul li {
-    margin: 10px 0;
-    color: #666;
-  }
-  
-  .plan-card .choose-plan {
-    background-color: #007bff;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-  }
-  
-  .plan-card .choose-plan:hover {
-    background-color: #0056b3;
-  } 
+}

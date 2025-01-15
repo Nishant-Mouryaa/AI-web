@@ -3,17 +3,20 @@
 import React, { Suspense, lazy } from 'react';
 import HeroSection from '../components/HeroSection';
 import Description from '../components/Description';
-import GetStartedButton from '../components/GetStartedButton';
+// import GetStartedButton from '../components/GetStartedButton';
+import { BiFontSize } from 'react-icons/bi';
 // Lazy load additional components
 const Features = lazy(() => import('../components/Features'));
 const HowItWorks = lazy(() => import('../components/HowItWorks'));
 const Testimonials = lazy(() => import('../components/Testimonials'));
-const Pricing = lazy(() => import('../components/Pricing'));
+// const Pricing = lazy(() => import('../components/Pricing'));
 const Gallery = lazy(() => import('../components/Gallery'));
 const CTA = lazy(() => import('../components/CTA'));
-const FAQ = lazy(() => import('../components/FAQ'));
+const FAQ = lazy(() => import('./FAQ'));
 const Contact = lazy(() => import('../components/Contact'));
 const Newsletter = lazy(() => import('../components/Newsletter'));
+// const heroBackground = 'https://i.postimg.cc/3xkYXkH9/cta-image.png';
+const Pricing = lazy(() => import('./Pricing'));
 
 const Home = () => {
   return (
@@ -26,15 +29,18 @@ const Home = () => {
       />
 
       {/* Get Started Button */}
-      <section className="text-center my-4">
+      {/* <section className="text-center my-4">
         <GetStartedButton text="Get Started" to="/get-started" />
-      </section>
+      </section> */}
 
       {/* Lazy Loaded Sections */}
       <Suspense fallback={<div>Loading...</div>}>
         <Features />
         <HowItWorks />
         <Testimonials />
+        <Description
+        text="Our pricing plans are designed to meet the needs of all businesses, regardless of size or budget. Choose the plan that best suits your needs and start building your dream website today!"
+      />
         <Pricing />
         <Gallery />
         <CTA />

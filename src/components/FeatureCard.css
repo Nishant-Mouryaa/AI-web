@@ -1,0 +1,40 @@
+/* src/components/FeatureCard.css */
+
+.feature-card {
+    transition: transform 0.3s, box-shadow 0.3s;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    border: none;
+    border-top: 1px solid rgba(128, 128, 128, 0.3); /* Light gray border */
+    border-radius: 8px;
+    background-color: #ffffff;
+    margin-left: 10px;
+    margin-right: 10px; 
+  }
+  
+  .feature-card:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.5); /* Bootstrap primary color outline */
+  }
+  
+  .feature-icon {
+    transition: transform 0.3s, color 0.3s;
+    display: inline-flex;
+  }
+  
+  .feature-card:hover .feature-icon,
+  .feature-card:focus .feature-icon {
+    transform: scale(1.2);
+    color: #007bff; /* Bootstrap primary color */
+  }
+  
+  .more-info {
+    margin-top: 10px;
+    overflow: hidden;
+  }
+  
+  .feature-card-wrapper {
+    height: 100%;
+  }
+  

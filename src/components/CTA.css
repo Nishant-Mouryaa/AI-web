@@ -1,0 +1,63 @@
+/* src/components/CTA.css */
+
+.cta-section {
+    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+    padding: 60px 20px;
+    border-radius: 15px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  }
+  
+  .cta-heading {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #1a202c; /* Dark text for contrast */
+    margin-bottom: 20px;
+  }
+  
+  .cta-subheading {
+    font-size: 1.25rem;
+    color: #4a5568; /* Gray text */
+  }
+  
+  .cta-button {
+    background-color: #38a169; /* Bootstrap success color */
+    border: none;
+    transition: background-color 0.3s, transform 0.3s;
+  }
+  
+  .cta-button:hover,
+  .cta-button:focus {
+    background-color: #2f855a; /* Darker shade on hover */
+    transform: translateY(-3px);
+  }
+  
+  .cta-image {
+    max-width: 100%;
+    height: auto;
+  }
+  
+  /* Responsive Adjustments */
+  @media (max-width: 768px) {
+    .cta-heading {
+      font-size: 2rem;
+    }
+  
+    .cta-subheading {
+      font-size: 1rem;
+    }
+  }
+  
+  @media (max-width: 576px) {
+    .cta-heading {
+      font-size: 1.75rem;
+    }
+  
+    .cta-subheading {
+      font-size: 0.95rem;
+    }
+  
+    .cta-button {
+      width: 100%;
+    }
+  }
+   
