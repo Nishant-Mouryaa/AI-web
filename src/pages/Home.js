@@ -12,11 +12,11 @@ const Testimonials = lazy(() => import('../components/Testimonials'));
 // const Pricing = lazy(() => import('../components/Pricing'));
 const Gallery = lazy(() => import('../components/Gallery'));
 const CTA = lazy(() => import('../components/CTA'));
-const FAQ = lazy(() => import('./FAQ'));
+const FAQ = lazy(() => import('../components/FAQ'));
 const Contact = lazy(() => import('../components/Contact'));
 const Newsletter = lazy(() => import('../components/Newsletter'));
 // const heroBackground = 'https://i.postimg.cc/3xkYXkH9/cta-image.png';
-const Pricing = lazy(() => import('./Pricing'));
+const Pricing = lazy(() => import('../components/Pricing'));
 
 const Home = () => {
   return (

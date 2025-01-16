@@ -33,7 +33,7 @@ const HeroSection = ({ title, subtitle }) => {
   const handleGetStarted = () => {
     // Define what happens when the button is clicked
     // For example, scroll to a section, open a modal, etc.
-    window.location.href = '#features'; // Example: Scroll to features section
+    window.location.href = '#Feature-container'; // Example: Scroll to features section
   };
 
   return (
@@ -94,7 +94,7 @@ const HeroSection = ({ title, subtitle }) => {
           transition={{ duration: 1, delay: 1.5 }}
           data-aos="fade-up"
         >
-          <a href="#features" aria-label="Scroll Down">
+          <a href="#Feature-container" aria-label="Scroll Down">
             <FaArrowDown className="scroll-icon" />
           </a>
         </motion.div>
