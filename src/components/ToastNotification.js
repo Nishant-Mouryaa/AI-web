@@ -17,7 +17,9 @@ const ToastNotification = ({ show, message, variant, onClose, delay = 3000 }) =>
         animation
       >
         <Toast.Header>
-          <strong className="me-auto">{variant === 'success' ? 'Success' : 'Error'}</strong>
+          <strong className="me-auto">
+            {variant === 'success' ? 'Success' : 'Error'}
+          </strong>
         </Toast.Header>
         <Toast.Body className="text-white">{message}</Toast.Body>
       </Toast>
@@ -34,4 +36,3 @@ ToastNotification.propTypes = {
 };
 
 export default ToastNotification;
- 

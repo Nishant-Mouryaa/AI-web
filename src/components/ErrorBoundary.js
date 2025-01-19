@@ -6,16 +6,17 @@ import { Alert } from 'react-bootstrap';
 class ErrorBoundary extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { hasError: false };
+    this.state = { hasError: false, errorInfo: null };
   }
 
   static getDerivedStateFromError(error) {
-    return { hasError: true };
+    // Update state so next render shows fallback UI
+    return { hasError: true, errorInfo: error };
   }
 
   componentDidCatch(error, errorInfo) {
     // You can log the error to an error reporting service here
-    console.error('Uncaught error:', error, errorInfo);
+    console.error("Uncaught error:", error, errorInfo);
   }
 
   render() {
@@ -32,4 +33,3 @@ class ErrorBoundary extends React.Component {
 }
 
 export default ErrorBoundary;
- 
