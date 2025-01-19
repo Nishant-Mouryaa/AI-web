@@ -30,15 +30,11 @@ const Dashboard = () => {
     },
     {
       onError: (err) => {
-        if (err.response && err.response.data && err.response.data.message) {
-          setToast({ show: true, message: err.response.data.message, variant: 'danger' });
-        } else {
-          setToast({ show: true, message: 'Failed to fetch user data', variant: 'danger' });
-        }
+        setToast({ show: true, message: 'Error fetching user data', variant: 'danger' });
       },
     }
   );
-
+  
   // Mutation for updating preferences
   const updatePreferencesMutation = useMutation(
     (newPreferences) => axiosInstance.put('/auth/user/preferences', newPreferences),
