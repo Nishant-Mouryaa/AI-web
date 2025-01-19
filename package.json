@@ -4,6 +4,8 @@
   "private": true,
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
+    "@tanstack/react-query": "^5.64.2",
+    "@tanstack/react-query-devtools": "^5.64.2",
     "aos": "^2.3.4",
     "axios": "^1.7.9",
     "bootstrap": "^5.3.3",
@@ -49,6 +51,7 @@
     ]
   },
   "devDependencies": {
-    "@babel/plugin-proposal-private-property-in-object": "^7.21.11"
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
+    "webpack-bundle-analyzer": "^4.10.2"
   }
 }

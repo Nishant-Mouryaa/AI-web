@@ -2,21 +2,29 @@
 
 import React from 'react';
 import { Nav } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
+import { FaHome, FaUser, FaCog, FaQuestionCircle } from 'react-icons/fa';
+import './Sidebar.css'; // Custom CSS for sidebar
 
 const DashboardSidebar = () => {
   return (
-    <Nav className="flex-column p-3">
-      <Nav.Link as={Link} to="/dashboard">
-        Overview
-      </Nav.Link>
-      <Nav.Link as={Link} to="/dashboard/settings">
+    <Nav defaultActiveKey="/dashboard" className="flex-column p-3">
+      <NavLink to="/dashboard" className="nav-link">
+        <FaHome className="me-2" />
+        Home
+      </NavLink>
+      <NavLink to="/dashboard/profile" className="nav-link">
+        <FaUser className="me-2" />
+        Profile
+      </NavLink>
+      <NavLink to="/dashboard/settings" className="nav-link">
+        <FaCog className="me-2" />
         Settings
-      </Nav.Link>
-      <Nav.Link as={Link} to="/dashboard/templates">
-        Templates
-      </Nav.Link>
-      {/* Add more navigation links as needed */}
+      </NavLink>
+      <NavLink to="/dashboard/help" className="nav-link">
+        <FaQuestionCircle className="me-2" />
+        Help
+      </NavLink>
     </Nav>
   );
 };

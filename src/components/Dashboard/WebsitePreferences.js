@@ -1,98 +1,68 @@
 // src/components/Dashboard/WebsitePreferences.js
 
 import React, { useState } from 'react';
-import { Card, Button, Modal, Form } from 'react-bootstrap';
+import { Card, Form, Button } from 'react-bootstrap';
+import PropTypes from 'prop-types';
+import './WebsitePreferences.css'; // Custom CSS for WebsitePreferences
 
 const WebsitePreferences = ({ preferences, updatePreferences }) => {
-  const [show, setShow] = useState(false);
-  const [formData, setFormData] = useState(preferences);
-
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-  };
+  const [theme, setTheme] = useState(preferences.theme);
+  const [layout, setLayout] = useState(preferences.layout);
+  const [notifications, setNotifications] = useState(preferences.notifications);
 
   const handleSave = () => {
-    updatePreferences(formData);
-    handleClose();
+    const newPreferences = { theme, layout, notifications };
+    updatePreferences(newPreferences);
   };
 
   return (
-    <>
-      <Card className="mb-4">
-        <Card.Header>Website Preferences</Card.Header>
-        <Card.Body>
-          <Card.Title>Theme</Card.Title>
-          <Card.Text>{preferences.theme}</Card.Text>
+    <Card className="mb-4 shadow-sm">
+      <Card.Header>Website Preferences</Card.Header>
+      <Card.Body>
+        <Form>
+          <Form.Group controlId="formTheme" className="mb-3">
+            <Form.Label>Theme</Form.Label>
+            <Form.Select value={theme} onChange={(e) => setTheme(e.target.value)}>
+              <option value="light">Light</option>
+              <option value="dark">Dark</option>
+              <option value="solarized">Solarized</option>
+            </Form.Select>
+          </Form.Group>
 
-          <Card.Title>Layout</Card.Title>
-          <Card.Text>{preferences.layout}</Card.Text>
+          <Form.Group controlId="formLayout" className="mb-3">
+            <Form.Label>Layout</Form.Label>
+            <Form.Select value={layout} onChange={(e) => setLayout(e.target.value)}>
+              <option value="single-column">Single Column</option>
+              <option value="double-column">Double Column</option>
+              <option value="grid">Grid</option>
+            </Form.Select>
+          </Form.Group>
 
-          <Card.Title>Color Scheme</Card.Title>
-          <Card.Text>{preferences.colorScheme}</Card.Text>
+          <Form.Group controlId="formNotifications" className="mb-3">
+            <Form.Check
+              type="switch"
+              label="Enable Notifications"
+              checked={notifications}
+              onChange={(e) => setNotifications(e.target.checked)}
+            />
+          </Form.Group>
 
-          <Button variant="primary" onClick={handleShow}>
-            Edit Preferences
-          </Button>
-        </Card.Body>
-      </Card>
-
-      {/* Edit Preferences Modal */}
-      <Modal show={show} onHide={handleClose}>
-        <Modal.Header closeButton>
-          <Modal.Title>Edit Website Preferences</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Form>
-            <Form.Group controlId="formTheme" className="mb-3">
-              <Form.Label>Theme</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Enter theme"
-                name="theme"
-                value={formData.theme}
-                onChange={handleChange}
-              />
-            </Form.Group>
-
-            <Form.Group controlId="formLayout" className="mb-3">
-              <Form.Label>Layout</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Enter layout"
-                name="layout"
-                value={formData.layout}
-                onChange={handleChange}
-              />
-            </Form.Group>
-
-            <Form.Group controlId="formColorScheme" className="mb-3">
-              <Form.Label>Color Scheme</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Enter color scheme"
-                name="colorScheme"
-                value={formData.colorScheme}
-                onChange={handleChange}
-              />
-            </Form.Group>
-          </Form>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
-            Cancel
-          </Button>
           <Button variant="primary" onClick={handleSave}>
-            Save Changes
+            Save Preferences
           </Button>
-        </Modal.Footer>
-      </Modal>
-    </>
+        </Form>
+      </Card.Body>
+    </Card>
   );
 };
 
-export default WebsitePreferences;
- 
+WebsitePreferences.propTypes = {
+  preferences: PropTypes.shape({
+    theme: PropTypes.string.isRequired,
+    layout: PropTypes.string.isRequired,
+    notifications: PropTypes.bool.isRequired,
+  }).isRequired,
+  updatePreferences: PropTypes.func.isRequired,
+};
+
+export default React.memo(WebsitePreferences);

@@ -1,0 +1,14 @@
+/* src/components/Dashboard/DashboardLayout.css */
+
+.sidebar-col {
+    padding: 0;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+  }
+  
+  .main-content-col {
+    overflow-y: auto;
+  }
+  

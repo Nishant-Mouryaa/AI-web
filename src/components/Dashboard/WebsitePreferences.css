@@ -1,0 +1,20 @@
+/* src/components/Dashboard/WebsitePreferences.css */
+
+.card-header {
+    background-color: #28a745;
+    color: white;
+    font-weight: bold;
+  }
+  
+  .card-body {
+    background-color: #ffffff;
+  }
+  
+  .btn {
+    transition: background-color 0.3s, color 0.3s;
+  }
+  
+  .btn:hover {
+    opacity: 0.9;
+  }
+   

@@ -9,6 +9,20 @@ import { AuthProvider } from './context/AuthContext'; // Import AuthProvider
 import reportWebVitals from './reportWebVitals';
 import 'aos/dist/aos.css'; // Import AOS styles
 import AOS from 'aos';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools'; // Import React Query Devtools
+import ErrorBoundary from './components/ErrorBoundary'; // Import ErrorBoundary
+
+// Create a new QueryClient instance with default options
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: 1, // Retry failed requests once
+      refetchOnWindowFocus: false, // Disable refetch on window focus
+      staleTime: 5 * 60 * 1000, // Data considered fresh for 5 minutes
+    },
+  },
+});
 
 // Define the Root component to initialize AOS and wrap App with providers
 const Root = () => {
@@ -21,9 +35,14 @@ const Root = () => {
 
   return (
     <React.StrictMode>
-      <AuthProvider>
-        <App />
-      </AuthProvider>
+      <QueryClientProvider client={queryClient}>
+        <AuthProvider>
+          <ErrorBoundary>
+            <App />
+          </ErrorBoundary>
+        </AuthProvider>
+        <ReactQueryDevtools initialIsOpen={false} position="bottom-right" />
+      </QueryClientProvider>
     </React.StrictMode>
   );
 };

@@ -1,0 +1,17 @@
+/* src/components/Dashboard/Sidebar.css */
+
+.nav-link {
+    color: #343a40;
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+    transition: color 0.3s, background-color 0.3s;
+    border-radius: 4px;
+  }
+  
+  .nav-link:hover,
+  .nav-link.active {
+    background-color: #e9ecef;
+    color: #007bff;
+    text-decoration: none;
+  }
+   

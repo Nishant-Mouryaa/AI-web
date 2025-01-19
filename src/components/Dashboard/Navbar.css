@@ -1,0 +1,16 @@
+/* src/components/Dashboard/Navbar.css */
+
+.navbar-brand {
+    font-weight: bold;
+  }
+  
+  .navbar .btn {
+    border-radius: 20px;
+    transition: background-color 0.3s, color 0.3s;
+  }
+  
+  .navbar .btn:hover {
+    background-color: #ffffff;
+    color: #343a40;
+  }
+   

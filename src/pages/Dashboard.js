@@ -1,158 +1,164 @@
 // src/pages/Dashboard.js
 
-import React, { useEffect, useState, useContext } from 'react';
-import { Container, Spinner, Alert, Row, Col } from 'react-bootstrap';
+import React, { useContext, useCallback } from 'react';
+import { Spinner, Alert } from 'react-bootstrap';
 import axiosInstance from '../api/axiosInstance'; // Import the Axios instance
 import { AuthContext } from '../context/AuthContext'; // Import AuthContext
 import { useNavigate } from 'react-router-dom';
-import DashboardNavbar from '../components/Dashboard/Navbar';
-import DashboardSidebar from '../components/Dashboard/Sidebar';
+import DashboardLayout from '../components/Dashboard/DashboardLayout';
 import UserDetails from '../components/Dashboard/UserDetails';
 import WebsitePreferences from '../components/Dashboard/WebsitePreferences';
 import DescriptionSection from '../components/Dashboard/DescriptionSection';
-// import DashboardFooter from '../components/Dashboard/Footer';
+import ToastNotification from '../components/ToastNotification'; // Toast component for notifications
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'; // Import React Query hooks
+import './Dashboard.css'; // Import custom CSS for Dashboard
 
 const Dashboard = () => {
   const { logout } = useContext(AuthContext); // Get logout function from context
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
-  const [userData, setUserData] = useState(null); // To store user details
-  const [loading, setLoading] = useState(true); // To handle loading state
-  const [error, setError] = useState(''); // To handle error messages
+  const [toast, setToast] = React.useState({ show: false, message: '', variant: '' }); // Toast notifications
 
-  useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        // Make GET request to the protected backend route
-        const response = await axiosInstance.get('/auth/user');
-        setUserData(response.data); // Store user data
-      } catch (err) {
-        // Handle errors (e.g., invalid token)
+  // Fetch user data using React Query
+  const { data: userData, isLoading, isError, error } = useQuery(
+    ['userData'],
+    async () => {
+      const response = await axiosInstance.get('/auth/user');
+      return response.data;
+    },
+    {
+      onError: (err) => {
         if (err.response && err.response.data && err.response.data.message) {
-          setError(err.response.data.message);
+          setToast({ show: true, message: err.response.data.message, variant: 'danger' });
         } else {
-          setError('Failed to fetch user data');
+          setToast({ show: true, message: 'Failed to fetch user data', variant: 'danger' });
         }
-        console.error(err);
-      } finally {
-        setLoading(false); // End loading state
-      }
-    };
+      },
+    }
+  );
 
-    fetchUserData();
-  }, []);
+  // Mutation for updating preferences
+  const updatePreferencesMutation = useMutation(
+    (newPreferences) => axiosInstance.put('/auth/user/preferences', newPreferences),
+    {
+      onSuccess: (data) => {
+        queryClient.setQueryData(['userData'], (oldData) => ({
+          ...oldData,
+          websitePreferences: data.data.websitePreferences,
+        }));
+        setToast({ show: true, message: 'Preferences updated successfully!', variant: 'success' });
+      },
+      onError: (err) => {
+        console.error('Failed to update preferences:', err);
+        setToast({ show: true, message: 'Failed to update preferences.', variant: 'danger' });
+      },
+    }
+  );
+
+  // Mutation for updating description
+  const updateDescriptionMutation = useMutation(
+    (newDescription) => axiosInstance.put('/auth/user/description', { description: newDescription }),
+    {
+      onSuccess: (data) => {
+        queryClient.setQueryData(['userData'], (oldData) => ({
+          ...oldData,
+          description: data.data.description,
+        }));
+        setToast({ show: true, message: 'Description updated successfully!', variant: 'success' });
+      },
+      onError: (err) => {
+        console.error('Failed to update description:', err);
+        setToast({ show: true, message: 'Failed to update description.', variant: 'danger' });
+      },
+    }
+  );
+
+  // Mutation for updating user details
+  const updateUserDetailsMutation = useMutation(
+    (newName) => axiosInstance.put('/auth/user/name', { name: newName }),
+    {
+      onSuccess: (data) => {
+        queryClient.setQueryData(['userData'], (oldData) => ({
+          ...oldData,
+          name: data.data.name,
+        }));
+        setToast({ show: true, message: 'Name updated successfully!', variant: 'success' });
+      },
+      onError: (err) => {
+        console.error('Failed to update name:', err);
+        setToast({ show: true, message: 'Failed to update name.', variant: 'danger' });
+      },
+    }
+  );
 
   // Handler for logout
-  const handleLogout = () => {
+  const handleLogout = useCallback(() => {
     logout(); // Clear authentication state and token
     navigate('/'); // Redirect to Home or Login page
+  }, [logout, navigate]);
+
+  // Handlers to trigger mutations
+  const updatePreferences = (newPreferences) => {
+    updatePreferencesMutation.mutate(newPreferences);
   };
 
-  // Handlers to update user data
-  const updatePreferences = async (newPreferences) => {
-    try {
-      const response = await axiosInstance.put('/auth/user/preferences', newPreferences);
-      setUserData((prevData) => ({
-        ...prevData,
-        websitePreferences: response.data.websitePreferences,
-      }));
-    } catch (err) {
-      console.error('Failed to update preferences:', err);
-      // Optionally, set error state or show a notification
-    }
+  const updateDescription = (newDescription) => {
+    updateDescriptionMutation.mutate(newDescription);
   };
 
-  const updateDescription = async (newDescription) => {
-    try {
-      const response = await axiosInstance.put('/auth/user/description', { description: newDescription });
-      setUserData((prevData) => ({
-        ...prevData,
-        description: response.data.description,
-      }));
-    } catch (err) {
-      console.error('Failed to update description:', err);
-      // Optionally, set error state or show a notification
-    }
+  const updateUserDetails = (newName) => {
+    updateUserDetailsMutation.mutate(newName);
   };
 
-  const updateUserDetails = async (newName) => {
-    try {
-      const response = await axiosInstance.put('/auth/user/name', { name: newName });
-      setUserData((prevData) => ({
-        ...prevData,
-        name: response.data.name,
-      }));
-    } catch (err) {
-      console.error('Failed to update name:', err);
-      // Optionally, set error state or show a notification
-    }
+  // Handler to close toast
+  const handleCloseToast = () => {
+    setToast({ ...toast, show: false });
   };
 
-  if (loading) {
+  if (isLoading) {
     return (
-      <>
-        <DashboardNavbar />
-        <Container className="mt-5 text-center">
+      <DashboardLayout>
+        <div className="d-flex justify-content-center align-items-center vh-100">
           <Spinner animation="border" role="status" />
-          <p className="mt-3">Loading your dashboard...</p>
-        </Container>
-      </>
+          <span className="ms-2">Loading your dashboard...</span>
+        </div>
+      </DashboardLayout>
     );
   }
 
-  if (error) {
-    // Check if the error is related to authentication
-    const isAuthError = error.toLowerCase().includes('authentication') || error.toLowerCase().includes('token');
-
+  if (isError) {
+    // Assuming error message is already handled in onError via toast
     return (
-      <>
-        <DashboardNavbar />
-        <Container className="mt-5">
-          <Alert variant="danger">
-            {error}
-            {isAuthError && (
-              <>
-                <Alert.Link href="/login"> Go to Login</Alert.Link>
-              </>
-            )}
-          </Alert>
-        </Container>
-      </>
+      <DashboardLayout>
+        <Alert variant="danger" className="mt-5">
+          An error occurred while fetching your data.
+          <Alert.Link href="/login"> Go to Login</Alert.Link>
+        </Alert>
+      </DashboardLayout>
     );
   }
 
   return (
     <>
-      <DashboardNavbar />
-      <Container fluid>
-        <Row>
-          {/* Sidebar */}
-          <Col xs={12} md={3} lg={2} className="bg-light vh-100">
-            <DashboardSidebar />
-          </Col>
+      <DashboardLayout>
+        <div className="dashboard-content">
+          <h2 className="mb-4">Dashboard</h2>
+          <UserDetails email={userData.email} name={userData.name} updateUserDetails={updateUserDetails} />
 
-          {/* Main Content */}
-          <Col xs={12} md={9} lg={10} className="py-4 d-flex flex-column">
-            <h2 className="mb-4">Dashboard</h2>
-            <UserDetails email={userData.email} name={userData.name} updateUserDetails={updateUserDetails} />
+          <WebsitePreferences preferences={userData.websitePreferences} updatePreferences={updatePreferences} />
 
-            <WebsitePreferences
-              preferences={userData.websitePreferences}
-              updatePreferences={updatePreferences}
-            />
+          <DescriptionSection description={userData.description} updateDescription={updateDescription} />
+        </div>
+      </DashboardLayout>
 
-            <DescriptionSection
-              description={userData.description}
-              updateDescription={updateDescription}
-            />
-
-            {/* Push Footer to bottom */}
-            <div className="mt-auto">
-              {/* <DashboardFooter /> */}
-            </div>
-          </Col>
-        </Row>
-      </Container>
+      {/* Toast Notifications */}
+      <ToastNotification
+        show={toast.show}
+        message={toast.message}
+        variant={toast.variant}
+        onClose={handleCloseToast}
+      />
     </>
   );
 };
