@@ -11,7 +11,7 @@ import 'aos/dist/aos.css'; // Import AOS styles
 import AOS from 'aos';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'; // Import React Query Devtools
-import ErrorBoundary from './components/ErrorBoundary'; // Import ErrorBoundary
+
 
 // Create a new QueryClient instance with default options
 const queryClient = new QueryClient({
@@ -37,9 +37,9 @@ const Root = () => {
     <React.StrictMode>
       <QueryClientProvider client={queryClient}>
         <AuthProvider>
-          <ErrorBoundary>
+          
             <App />
-          </ErrorBoundary>
+          
         </AuthProvider>
         <ReactQueryDevtools initialIsOpen={false} position="bottom-right" />
       </QueryClientProvider>
