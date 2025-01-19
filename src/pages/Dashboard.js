@@ -140,10 +140,10 @@ const Dashboard = () => {
 
   // Error State
   if (isError) {
-    // Since the error is handled via toast, we can optionally display a simple message or omit the Alert
+    // Since the error is handled via toast, you might opt to remove the Alert
+    // However, keeping it can aid accessibility
     return (
       <DashboardLayout>
-        {/* Optional: A minimal error display */}
         <div className="mt-5 text-center">
           <Alert variant="danger">
             An error occurred while fetching your data. Please try refreshing the page or{' '}
