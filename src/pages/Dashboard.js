@@ -1,10 +1,10 @@
 // src/pages/Dashboard.js
 
-import React, { useContext, useCallback } from 'react';
+import React, { useContext, useCallback, useState } from 'react';
 import { Spinner, Alert } from 'react-bootstrap';
+import { Link, useNavigate } from 'react-router-dom'; // Import Link for client-side navigation
 import axiosInstance from '../api/axiosInstance'; // Import the Axios instance
 import { AuthContext } from '../context/AuthContext'; // Import AuthContext
-import { useNavigate } from 'react-router-dom';
 import DashboardLayout from '../components/Dashboard/DashboardLayout';
 import UserDetails from '../components/Dashboard/UserDetails';
 import WebsitePreferences from '../components/Dashboard/WebsitePreferences';
@@ -18,7 +18,8 @@ const Dashboard = () => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
-  const [toast, setToast] = React.useState({ show: false, message: '', variant: '' }); // Toast notifications
+  // Destructure useState for consistency
+  const [toast, setToast] = useState({ show: false, message: '', variant: '' });
 
   // Fetch user data using React Query
   const { data: userData, isLoading, isError, error } = useQuery(
@@ -99,23 +100,33 @@ const Dashboard = () => {
   }, [logout, navigate]);
 
   // Handlers to trigger mutations
-  const updatePreferences = (newPreferences) => {
-    updatePreferencesMutation.mutate(newPreferences);
-  };
+  const updatePreferences = useCallback(
+    (newPreferences) => {
+      updatePreferencesMutation.mutate(newPreferences);
+    },
+    [updatePreferencesMutation]
+  );
 
-  const updateDescription = (newDescription) => {
-    updateDescriptionMutation.mutate(newDescription);
-  };
+  const updateDescription = useCallback(
+    (newDescription) => {
+      updateDescriptionMutation.mutate(newDescription);
+    },
+    [updateDescriptionMutation]
+  );
 
-  const updateUserDetails = (newName) => {
-    updateUserDetailsMutation.mutate(newName);
-  };
+  const updateUserDetails = useCallback(
+    (newName) => {
+      updateUserDetailsMutation.mutate(newName);
+    },
+    [updateUserDetailsMutation]
+  );
 
   // Handler to close toast
-  const handleCloseToast = () => {
-    setToast({ ...toast, show: false });
-  };
+  const handleCloseToast = useCallback(() => {
+    setToast((prev) => ({ ...prev, show: false }));
+  }, []);
 
+  // Loading State
   if (isLoading) {
     return (
       <DashboardLayout>
@@ -127,14 +138,18 @@ const Dashboard = () => {
     );
   }
 
+  // Error State
   if (isError) {
-    // Assuming error message is already handled in onError via toast
+    // Since the error is handled via toast, we can optionally display a simple message or omit the Alert
     return (
       <DashboardLayout>
-        <Alert variant="danger" className="mt-5">
-          An error occurred while fetching your data.
-          <Alert.Link href="/login"> Go to Login</Alert.Link>
-        </Alert>
+        {/* Optional: A minimal error display */}
+        <div className="mt-5 text-center">
+          <Alert variant="danger">
+            An error occurred while fetching your data. Please try refreshing the page or{' '}
+            <Link to="/login">go to Login</Link>.
+          </Alert>
+        </div>
       </DashboardLayout>
     );
   }
