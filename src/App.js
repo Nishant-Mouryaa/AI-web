@@ -9,6 +9,7 @@ import FAQPage from './pages/FAQ';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 import Dashboard from './pages/Dashboard';
+import DashboardHome from './pages/DashboardHome'; // Ensure this is correctly imported
 import Profile from './pages/Profile';
 import SettingsProfile from './pages/SettingsProfile';
 import SettingsAccount from './pages/SettingsAccount';
@@ -50,21 +51,11 @@ function App() {
         </Route>
 
         {/* Fallback Route */}
-        <Route path="*" element={<Navigate to="/" />} />
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
       <Footer />
     </Router>
   );
 }
-
-// Dashboard Home Component (Represents /dashboard)
-const DashboardHome = () => {
-  return (
-    <div>
-      <h2>Welcome to the Dashboard</h2>
-      {/* Add dashboard-specific content here */}
-    </div>
-  );
-};
 
 export default App;
