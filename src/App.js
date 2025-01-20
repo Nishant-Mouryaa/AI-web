@@ -9,6 +9,7 @@ import FAQPage from './pages/FAQ';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 import Dashboard from './pages/Dashboard';
+import DashboardHome from './pages/DashboardHome';
 import Profile from './pages/Profile';
 import SettingsProfile from './pages/SettingsProfile';
 import SettingsAccount from './pages/SettingsAccount';
