@@ -1,4 +1,4 @@
-// src/components/Dashboard/DashboardSidebar.js
+// src/components/Dashboard/Sidebar.js
 
 import React, { useState, useEffect } from 'react';
 import { Nav, Button, Collapse, OverlayTrigger, Tooltip } from 'react-bootstrap';
@@ -15,7 +15,7 @@ import {
   FaUserCog,
   FaLock,
 } from 'react-icons/fa';
-import './DashboardSidebar.css'; // Custom CSS for sidebar
+import './Sidebar.css'; // Custom CSS for sidebar
 
 const DashboardSidebar = () => {
   const [collapsed, setCollapsed] = useState(false);

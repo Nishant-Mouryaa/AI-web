@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
-import DashboardSidebar from './DashboardSidebar'; // Ensure correct path
+import DashboardSidebar from './Sidebar'; // Ensure correct path
 import './DashboardLayout.css'; // Custom CSS for layout
 
 const DashboardLayout = ({ children }) => {
