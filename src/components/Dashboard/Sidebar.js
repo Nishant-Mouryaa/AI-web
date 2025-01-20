@@ -1,4 +1,4 @@
-// src/components/Dashboard/Sidebar.js
+// src/components/Dashboard/DashboardSidebar.js
 
 import React, { useState, useEffect } from 'react';
 import { Nav, Button, Collapse, OverlayTrigger, Tooltip } from 'react-bootstrap';
@@ -15,7 +15,7 @@ import {
   FaUserCog,
   FaLock,
 } from 'react-icons/fa';
-import './Sidebar.css'; // Custom CSS for sidebar
+import './DashboardSidebar.css'; // Custom CSS for sidebar
 
 const DashboardSidebar = () => {
   const [collapsed, setCollapsed] = useState(false);
@@ -64,10 +64,10 @@ const DashboardSidebar = () => {
     <div className={`sidebar ${collapsed ? 'collapsed' : ''}`}>
       <div className="sidebar-header d-flex align-items-center justify-content-between p-3">
         {!collapsed && <h4>AI Builder</h4>}
-        <Button 
-          variant="link" 
-          onClick={toggleSidebar} 
-          className="text-white" 
+        <Button
+          variant="link"
+          onClick={toggleSidebar}
+          className="text-white"
           aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
         >
           {collapsed ? <FaChevronRight /> : <FaChevronLeft />}
@@ -78,8 +78,8 @@ const DashboardSidebar = () => {
           placement="right"
           overlay={renderTooltip('Home')}
         >
-          <NavLink 
-            to="/dashboard" 
+          <NavLink
+            to="/dashboard"
             className={`nav-link d-flex align-items-center ${location.pathname === '/dashboard' ? 'active' : ''}`}
           >
             <FaHome className="me-2" />
@@ -91,8 +91,8 @@ const DashboardSidebar = () => {
           placement="right"
           overlay={renderTooltip('Profile')}
         >
-          <NavLink 
-            to="/dashboard/profile" 
+          <NavLink
+            to="/dashboard/profile"
             className={`nav-link d-flex align-items-center ${location.pathname === '/dashboard/profile' ? 'active' : ''}`}
           >
             <FaUser className="me-2" />
@@ -125,8 +125,8 @@ const DashboardSidebar = () => {
                 placement="right"
                 overlay={renderTooltip('Profile Settings')}
               >
-                <NavLink 
-                  to="/dashboard/settings/profile" 
+                <NavLink
+                  to="/dashboard/settings/profile"
                   className={`nav-link ms-4 d-flex align-items-center ${location.pathname === '/dashboard/settings/profile' ? 'active' : ''}`}
                 >
                   <FaUserCog className="me-2" />
@@ -137,8 +137,8 @@ const DashboardSidebar = () => {
                 placement="right"
                 overlay={renderTooltip('Account Settings')}
               >
-                <NavLink 
-                  to="/dashboard/settings/account" 
+                <NavLink
+                  to="/dashboard/settings/account"
                   className={`nav-link ms-4 d-flex align-items-center ${location.pathname === '/dashboard/settings/account' ? 'active' : ''}`}
                 >
                   <FaLock className="me-2" />
@@ -153,8 +153,8 @@ const DashboardSidebar = () => {
           placement="right"
           overlay={renderTooltip('Help')}
         >
-          <NavLink 
-            to="/dashboard/help" 
+          <NavLink
+            to="/dashboard/help"
             className={`nav-link d-flex align-items-center ${location.pathname === '/dashboard/help' ? 'active' : ''}`}
           >
             <FaQuestionCircle className="me-2" />
@@ -167,28 +167,28 @@ const DashboardSidebar = () => {
         <div className="d-flex align-items-center">
           <div className="user-avatar me-2">
             {/* Replace with user avatar */}
-            <img 
-              src="/path-to-avatar.png" 
-              alt="User Avatar" 
-              className="img-fluid rounded-circle" 
+            <img
+              src="/path-to-avatar.png"
+              alt="User Avatar"
+              className="img-fluid rounded-circle"
             />
           </div>
           {!collapsed && <span className="user-name">John Doe</span>}
         </div>
         {!collapsed && (
           <>
-            <Button 
-              variant="outline-light" 
-              size="sm" 
-              className="mt-2 w-100" 
+            <Button
+              variant="outline-light"
+              size="sm"
+              className="mt-2 w-100"
               onClick={() => { navigate('/dashboard/profile'); }}
             >
               View Profile
             </Button>
-            <Button 
-              variant="outline-light" 
-              size="sm" 
-              className="mt-2 w-100" 
+            <Button
+              variant="outline-light"
+              size="sm"
+              className="mt-2 w-100"
               onClick={handleLogout}
             >
               Logout
