@@ -12,12 +12,9 @@ const DashboardLayout = ({ children }) => {
       <DashboardNavbar />
       <Container fluid>
         <Row>
-          {/* Sidebar */}
-          <Col xs={12} md={3} lg={2} className="bg-light vh-100 sidebar-col">
+          <Col xs={12} md={3} lg={2} className="p-0">
             <DashboardSidebar />
           </Col>
-
-          {/* Main Content */}
           <Col xs={12} md={9} lg={10} className="py-4 main-content-col">
             {children}
           </Col>
