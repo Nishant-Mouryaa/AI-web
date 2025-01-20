@@ -1,6 +1,6 @@
 // src/pages/DashboardHome.js
 
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useContext } from 'react';
 import { Spinner, Alert, Card, Row, Col, Button } from 'react-bootstrap';
 import axiosInstance from '../api/axiosInstance';
 import ToastNotification from '../components/ToastNotification';
@@ -20,11 +20,15 @@ import {
   Legend,
 } from 'recharts';
 import './DashboardHome.css'; // Import custom CSS for DashboardHome
+import { AuthContext } from '../context/AuthContext'; // Optional: To access user data
 
 const DashboardHome = () => {
-  const [userData, setUserData] = useState(null);
+  const { user } = useContext(AuthContext); // Optional: Access user data if needed
+
+  const [metrics, setMetrics] = useState(null);
   const [subscriptionData, setSubscriptionData] = useState([]);
   const [revenueData, setRevenueData] = useState([]);
+  const [revenueBySource, setRevenueBySource] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
@@ -32,21 +36,24 @@ const DashboardHome = () => {
 
   useEffect(() => {
     const fetchDashboardData = async () => {
+      console.log('Fetching dashboard data...');
       try {
-        const [userResponse, subscriptionResponse, revenueResponse] = await Promise.all([
-          axiosInstance.get('/auth/user'),
-          axiosInstance.get('/auth/user/subscriptions'),
-          axiosInstance.get('/auth/user/revenue'),
+        const [metricsResponse, subscriptionsResponse, revenueResponse, revenueSourceResponse] = await Promise.all([
+          axiosInstance.get('/dashboard/metrics'),
+          axiosInstance.get('/dashboard/subscriptions'),
+          axiosInstance.get('/dashboard/revenue'),
+          axiosInstance.get('/dashboard/revenue-source'),
         ]);
 
-        setUserData(userResponse.data);
+        console.log('Metrics Data:', metricsResponse.data);
+        console.log('Subscriptions Data:', subscriptionsResponse.data);
+        console.log('Revenue Data:', revenueResponse.data);
+        console.log('Revenue by Source Data:', revenueSourceResponse.data);
 
-        // Example subscription data
-        setSubscriptionData(subscriptionResponse.data);
-
-        // Example revenue data
+        setMetrics(metricsResponse.data);
+        setSubscriptionData(subscriptionsResponse.data);
         setRevenueData(revenueResponse.data);
-
+        setRevenueBySource(revenueSourceResponse.data);
         setIsLoading(false);
       } catch (error) {
         console.error('Error fetching dashboard data:', error);
@@ -68,28 +75,18 @@ const DashboardHome = () => {
     setToast({ ...toast, show: false });
   };
 
-  // Prepare data for PieChart (e.g., Revenue by Source)
-  const revenueBySource = useMemo(() => {
-    if (!userData) return [];
-    // Example structure
-    return userData.revenueBySource.map((source) => ({
-      name: source.source,
-      value: source.amount,
-    }));
-  }, [userData]);
-
   // Colors for PieChart
   const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#AA336A'];
 
-  // Sample insights based on userData
+  // Sample insights based on metrics
   const insights = useMemo(() => {
-    if (!userData) return null;
+    if (!metrics) return null;
     return {
-      growth: userData.subscriptionGrowthPercentage,
-      topSource: userData.topRevenueSource,
-      recommendations: `Consider focusing on enhancing features for ${userData.topRevenueSource} to further boost your revenue.`,
+      growth: metrics.subscriptionGrowthPercentage,
+      topSource: metrics.topRevenueSource,
+      recommendations: `Consider focusing on enhancing features for ${metrics.topRevenueSource} to further boost your revenue.`,
     };
-  }, [userData]);
+  }, [metrics]);
 
   if (isLoading) {
     return (
@@ -123,7 +120,7 @@ const DashboardHome = () => {
           <Card className="mb-4 shadow-sm">
             <Card.Body className="text-center">
               <Card.Title>Total Users</Card.Title>
-              <Card.Text className="display-4">{userData.totalUsers}</Card.Text>
+              <Card.Text className="display-4">{metrics.totalUsers}</Card.Text>
             </Card.Body>
           </Card>
         </Col>
@@ -133,7 +130,7 @@ const DashboardHome = () => {
           <Card className="mb-4 shadow-sm">
             <Card.Body className="text-center">
               <Card.Title>Active Subscriptions</Card.Title>
-              <Card.Text className="display-4">{userData.activeSubscriptions}</Card.Text>
+              <Card.Text className="display-4">{metrics.activeSubscriptions}</Card.Text>
             </Card.Body>
           </Card>
         </Col>
@@ -143,7 +140,7 @@ const DashboardHome = () => {
           <Card className="mb-4 shadow-sm">
             <Card.Body className="text-center">
               <Card.Title>Revenue</Card.Title>
-              <Card.Text className="display-4">${userData.revenue.toLocaleString()}</Card.Text>
+              <Card.Text className="display-4">${metrics.revenue.toLocaleString()}</Card.Text>
             </Card.Body>
           </Card>
         </Col>
@@ -156,16 +153,20 @@ const DashboardHome = () => {
           <Card className="shadow-sm h-100">
             <Card.Body>
               <Card.Title>Active Subscriptions Over Time</Card.Title>
-              <ResponsiveContainer width="100%" height={300}>
-                <LineChart data={subscriptionData}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="month" />
-                  <YAxis />
-                  <Tooltip />
-                  <Legend />
-                  <Line type="monotone" dataKey="activeSubscriptions" stroke="#8884d8" />
-                </LineChart>
-              </ResponsiveContainer>
+              {subscriptionData.length > 0 ? (
+                <ResponsiveContainer width="100%" height={300}>
+                  <LineChart data={subscriptionData}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="month" />
+                    <YAxis />
+                    <Tooltip />
+                    <Legend />
+                    <Line type="monotone" dataKey="activeSubscriptions" stroke="#8884d8" />
+                  </LineChart>
+                </ResponsiveContainer>
+              ) : (
+                <Alert variant="warning">No subscription data available.</Alert>
+              )}
             </Card.Body>
           </Card>
         </Col>
@@ -175,16 +176,20 @@ const DashboardHome = () => {
           <Card className="shadow-sm h-100">
             <Card.Body>
               <Card.Title>Revenue Over Time</Card.Title>
-              <ResponsiveContainer width="100%" height={300}>
-                <BarChart data={revenueData}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="month" />
-                  <YAxis />
-                  <Tooltip />
-                  <Legend />
-                  <Bar dataKey="revenue" fill="#82ca9d" />
-                </BarChart>
-              </ResponsiveContainer>
+              {revenueData.length > 0 ? (
+                <ResponsiveContainer width="100%" height={300}>
+                  <BarChart data={revenueData}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="month" />
+                    <YAxis />
+                    <Tooltip />
+                    <Legend />
+                    <Bar dataKey="revenue" fill="#82ca9d" />
+                  </BarChart>
+                </ResponsiveContainer>
+              ) : (
+                <Alert variant="warning">No revenue data available.</Alert>
+              )}
             </Card.Body>
           </Card>
         </Col>
@@ -196,26 +201,30 @@ const DashboardHome = () => {
           <Card className="shadow-sm h-100">
             <Card.Body>
               <Card.Title>Revenue by Source</Card.Title>
-              <ResponsiveContainer width="100%" height={300}>
-                <PieChart>
-                  <Pie
-                    data={revenueBySource}
-                    dataKey="value"
-                    nameKey="name"
-                    cx="50%"
-                    cy="50%"
-                    outerRadius={100}
-                    fill="#8884d8"
-                    label
-                  >
-                    {revenueBySource.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                    ))}
-                  </Pie>
-                  <Tooltip />
-                  <Legend />
-                </PieChart>
-              </ResponsiveContainer>
+              {revenueBySource.length > 0 ? (
+                <ResponsiveContainer width="100%" height={300}>
+                  <PieChart>
+                    <Pie
+                      data={revenueBySource}
+                      dataKey="value"
+                      nameKey="name"
+                      cx="50%"
+                      cy="50%"
+                      outerRadius={100}
+                      fill="#8884d8"
+                      label
+                    >
+                      {revenueBySource.map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                      ))}
+                    </Pie>
+                    <Tooltip />
+                    <Legend />
+                  </PieChart>
+                </ResponsiveContainer>
+              ) : (
+                <Alert variant="warning">No revenue source data available.</Alert>
+              )}
             </Card.Body>
           </Card>
         </Col>
