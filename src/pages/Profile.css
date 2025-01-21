@@ -1,0 +1,14 @@
+/* src/pages/Profile.css */
+
+/* Style for the avatar image preview */
+.avatar-preview {
+    border: 2px solid #dee2e6;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 767px) {
+    .avatar-preview {
+      margin-bottom: 15px;
+    }
+  }
+  
