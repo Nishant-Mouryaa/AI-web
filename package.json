@@ -54,6 +54,7 @@
   },
   "devDependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
+    "css-loader": "^7.1.2",
     "webpack-bundle-analyzer": "^4.10.2"
   }
 }
